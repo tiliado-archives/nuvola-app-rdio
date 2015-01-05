@@ -65,6 +65,8 @@
 	{
 		var can_prev = false;
 		var can_next = false;
+		var can_play = false;
+		var can_pause = false;
 		var track = {
 			title:       null,
 			artist:      null,
@@ -94,10 +96,13 @@
 			{
 				case 0:
 					state = PlaybackState.PAUSED;
+					can_pause = false;
+					can_play = true;
 					break;
 				case 1:
 					state = PlaybackState.PLAYING;
-					this.firstPlayToggle();
+					can_pause = true;
+					can_play = false;
 					break;
 			}
 
@@ -112,6 +117,10 @@
 
 		player.setTrack(track);
 		player.setPlaybackState(state);
+		player.setCanGoNext(can_next);
+		player.setCanGoPrev(can_prev);
+		player.setCanPlay(can_play);
+		player.setCanPause(can_pause);
 
 		// Schedule the next update
 		setTimeout(this.update.bind(this), 500);
