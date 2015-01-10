@@ -63,10 +63,10 @@
 	// Extract data from the web page
 	WebApp.update = function()
 	{
-		var can_prev = false;
-		var can_next = false;
-		var can_play = false;
-		var can_pause = false;
+		var canPrev = false;
+		var canNext = false;
+		var canPlay = false;
+		var canPause = false;
 		var track = {
 			title:       null,
 			artist:      null,
@@ -74,19 +74,15 @@
 			artLocation: null
 		}
 
-		try
+		if (R != undefined)
 		{
 			var playingTrack = R.Services.Player.model.get("playingTrack").attributes;
 			track = {
 				title:  playingTrack.name,
 				artist: playingTrack.artist,
 				album: playingTrack.album,
-				artLocation: playingTrack.baseIcon
+				artLocation: playingTrack.icon400 || playingTrack.icon
 			}
-		}
-		catch (e)
-		{
-			console.debug(Nuvola.format(Nuvola.Translate.gettext("Unable to obtain song info: {1}"), e.message));
 		}
 
 		var state = PlaybackState.UNKNOWN;
@@ -96,31 +92,31 @@
 			{
 				case 0:
 					state = PlaybackState.PAUSED;
-					can_pause = false;
-					can_play = true;
+					canPause = false;
+					canPlay = true;
 					break;
 				case 1:
 					state = PlaybackState.PLAYING;
-					can_pause = true;
-					can_play = false;
+					canPause = true;
+					canPlay = false;
 					break;
 			}
 
 			if (state != PlaybackState.UNKNOWN)
-				can_prev = can_next = true;
+				canPrev = canNext = true;
 		}
 		catch (e)
 		{
 			// console.debug("Unable to obtain state info: " + e.message);
-			can_prev = can_next = false;
+			canPrev = canNext = false;
 		}
 
 		player.setTrack(track);
 		player.setPlaybackState(state);
-		player.setCanGoNext(can_next);
-		player.setCanGoPrev(can_prev);
-		player.setCanPlay(can_play);
-		player.setCanPause(can_pause);
+		player.setCanGoNext(canNext);
+		player.setCanGoPrev(canPrev);
+		player.setCanPlay(canPlay);
+		player.setCanPause(canPause);
 
 		// Schedule the next update
 		setTimeout(this.update.bind(this), 500);
@@ -129,36 +125,33 @@
 	// Handler of playback actions
 	WebApp._onActionActivated = function(emitter, name, param)
 	{
-		try
-		{
-			switch (name)
-			{
-				case PlayerAction.PLAY:
-					R.Services.Player.play();
-					break;
-				case PlayerAction.PAUSE:
-					R.Services.Player.pause();
-					break;
-				case PlayerAction.TOGGLE_PLAY:
-					R.Services.Player.playPause();
-					break;
-				case PlayerAction.PREV_SONG:
-					R.Services.Player.previous();
-					break;
-				case PlayerAction.NEXT_SONG:
-					R.Services.Player.next();
-					break;
-				default:
-					// Other commands are not supported
-					throw {"message": "Not supported."};
-			}
-			console.log(Nuvola.format(Nuvola.Translate.gettext("{1} : comand '{2}' executed."), this.name, name));
+		if (R == undefined) {
+			console.log("Radio service is not available.");
+			return;
 		}
-		catch (e)
+
+		switch (name)
 		{
-			// API expects exception to be a string!
-			throw (Nuvola.format("{1}: {2}", this.name, e.message));
+			case PlayerAction.PLAY:
+				R.Services.Player.play();
+				break;
+			case PlayerAction.PAUSE:
+				R.Services.Player.pause();
+				break;
+			case PlayerAction.TOGGLE_PLAY:
+				R.Services.Player.playPause();
+				break;
+			case PlayerAction.PREV_SONG:
+				R.Services.Player.previous();
+				break;
+			case PlayerAction.NEXT_SONG:
+				R.Services.Player.next();
+				break;
+			default:
+				// Other commands are not supported
+				throw {"message": "Not supported."};
 		}
+		console.log(Nuvola.format("{1} : comand '{2}' executed.", this.name, name));
 	}
 	WebApp.start();
 })(this);  // function(Nuvola)
