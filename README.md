@@ -1,3 +1,5 @@
+*This web app integration script is only a template. It doesn't work.*
+
 Rdio for Nuvola Player 3
 ========================
 
