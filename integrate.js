@@ -74,7 +74,9 @@
 			artLocation: null
 		}
 
-		if (R != undefined)
+		var state = PlaybackState.UNKNOWN;
+		
+		try
 		{
 			var playingTrack = R.Services.Player.model.get("playingTrack").attributes;
 			track = {
@@ -83,11 +85,7 @@
 				album: playingTrack.album,
 				artLocation: playingTrack.icon400 || playingTrack.icon
 			}
-		}
 
-		var state = PlaybackState.UNKNOWN;
-		try
-		{
 			switch (R.Services.Player.model.attributes.playState)
 			{
 				case 0:
@@ -125,33 +123,35 @@
 	// Handler of playback actions
 	WebApp._onActionActivated = function(emitter, name, param)
 	{
-		if (R == undefined) {
-			console.log("Radio service is not available.");
-			return;
-		}
-
-		switch (name)
+		try
 		{
-			case PlayerAction.PLAY:
-				R.Services.Player.play();
-				break;
-			case PlayerAction.PAUSE:
-				R.Services.Player.pause();
-				break;
-			case PlayerAction.TOGGLE_PLAY:
-				R.Services.Player.playPause();
-				break;
-			case PlayerAction.PREV_SONG:
-				R.Services.Player.previous();
-				break;
-			case PlayerAction.NEXT_SONG:
-				R.Services.Player.next();
-				break;
-			default:
-				// Other commands are not supported
-				throw {"message": "Not supported."};
+			switch (name)
+			{
+				case PlayerAction.PLAY:
+					R.Services.Player.play();
+					break;
+				case PlayerAction.PAUSE:
+					R.Services.Player.pause();
+					break;
+				case PlayerAction.TOGGLE_PLAY:
+					R.Services.Player.playPause();
+					break;
+				case PlayerAction.PREV_SONG:
+					R.Services.Player.previous();
+					break;
+				case PlayerAction.NEXT_SONG:
+					R.Services.Player.next();
+					break;
+				default:
+					// Other commands are not supported
+					throw {"message": "Not supported."};
+			}
+			console.log(Nuvola.format("{1} : comand '{2}' executed.", this.name, name));
 		}
-		console.log(Nuvola.format("{1} : comand '{2}' executed.", this.name, name));
+		catch (e)
+		{
+			console.log("Radio service is not available.");
+		}
 	}
 	WebApp.start();
 })(this);  // function(Nuvola)
