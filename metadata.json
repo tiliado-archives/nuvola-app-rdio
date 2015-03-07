@@ -1,8 +1,10 @@
 {
     "id": "rdio",
     "name": "Rdio",
-    "maintainer_name": "Michael Mims?",
-    "maintainer_link": "https://github.com/FIXME",
+    "maintainer_name": "Aaron Cripps",
+    "maintainer_link": "https://github.com/eurythmia/",
+    "allowed_uri":"https?://((www\\.)?rdio\\.com|ak.rdio\\.com|)",
+    "home_url": "http://www.rdio.com",
     "version_major": 4,
     "version_minor": 0,
     "api_major": 3,
