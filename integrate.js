@@ -3,6 +3,7 @@
  * Copyright 2014 Martin Pöhlmann <martin.deimos@gmx.de>
  * Copyright 2014 Jiří Janoušek <janousek.jiri@gmail.com>
  * Copyright 2015 Aaron Cripps <acripps@gmail.com>
+ * Copyright 2015 Jordan Klassen <forivall@gmail.com>
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are met:
@@ -75,7 +76,7 @@
 		}
 
 		var state = PlaybackState.UNKNOWN;
-		
+
 		try
 		{
 			var playingTrack = R.Services.Player.model.get("playingTrack").attributes;
