@@ -3,6 +3,7 @@
  * Copyright 2014 Martin Pöhlmann <martin.deimos@gmx.de>
  * Copyright 2014 Jiří Janoušek <janousek.jiri@gmail.com>
  * Copyright 2015 Aaron Cripps <acripps@gmail.com>
+ * Copyright 2015 Jordan Klassen <forivall@gmail.com>
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are met:
@@ -75,7 +76,7 @@
 		}
 
 		var state = PlaybackState.UNKNOWN;
-		
+
 		try
 		{
 			var playingTrack = R.Services.Player.model.get("playingTrack").attributes;
@@ -115,6 +116,23 @@
 		player.setCanGoPrev(canPrev);
 		player.setCanPlay(canPlay);
 		player.setCanPause(canPause);
+
+		// synchronise stream volume with app volume
+		if (state == PlaybackState.PLAYING) {
+			try {
+				var playerVolume = R.Services.Player.volume();
+				var streamVolume = R.Services.Player._audio._element.volume;
+				if (streamVolume != null) {
+					streamVolume = Math.sqrt(streamVolume);
+					if (Math.abs(streamVolume - playerVolume) >= 0.01) {
+						R.Services.Player.volume(streamVolume);
+					}
+				}
+			}
+			catch (e) {
+				// do nothing
+			}
+		}
 
 		// Schedule the next update
 		setTimeout(this.update.bind(this), 500);

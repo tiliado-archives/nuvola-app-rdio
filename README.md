@@ -3,7 +3,7 @@ Rdio for Nuvola Player 3
 
 Integration of Rdio into your linux desktop via
 [Nuvola Player](https://github.com/tiliado/nuvolaplayer).
- 
+
 Support
 -------
 
@@ -19,6 +19,7 @@ Installation
 
 Copyright
 ---------
+  - Copyright 2015 Jordan Klassen <forivall@gmail.com>
   - Copyright 2015 Aaron Cripps <acripps@gmail.com>
   - Copyright 2014 Jiří Janoušek <janousek.jiri@gmail.com>
   - Copyright 2014 Martin Pöhlmann <martin.deimos@gmx.de>
